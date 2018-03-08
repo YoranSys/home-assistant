@@ -11,4 +11,4 @@ venv
 .vagrant
 
 # Temporary files
-**/__pycache__
+*/__pycache__

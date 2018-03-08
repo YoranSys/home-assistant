@@ -1,8 +1,10 @@
+FROM resin/armv7hf-debian:stretch
+
+RUN [ "cross-build-start" ]
 # Notice:
 # When updating this file, please also update virtualization/Docker/Dockerfile.dev
 # This way, the development image and the production image are kept in sync.
 
-FROM python:3.6
 LABEL maintainer="Paulus Schoutsen <Paulus@PaulusSchoutsen.nl>"
 
 # Uncomment any of the following lines to disable the installation.
@@ -20,6 +22,8 @@ WORKDIR /usr/src/app
 
 # Copy build scripts
 COPY virtualization/Docker/ virtualization/Docker/
+RUN apt update && apt install python3
+
 RUN virtualization/Docker/setup_docker_prereqs
 
 # Install hass component dependencies
@@ -31,5 +35,6 @@ RUN pip3 install --no-cache-dir -r requirements_all.txt && \
 
 # Copy source
 COPY . .
+RUN [ "cross-build-end" ]
 
 CMD [ "python", "-m", "homeassistant", "--config", "/config" ]
